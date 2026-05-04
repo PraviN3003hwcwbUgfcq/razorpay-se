@@ -12,7 +12,8 @@ const {
   saveBusinessStructure,
   saveBusinessName,
   savePanDetails,
-  getOnboarding
+  getOnboarding,
+  getOnboardingStatus
 } = require("../controllers/onboardingController");
 
 router.post("/contact", auth, saveContact);
@@ -24,6 +25,6 @@ router.post("/business-structure", auth, saveBusinessStructure);
 router.post("/business-name", auth, saveBusinessName);
 router.post("/pan-details", auth, savePanDetails);
 
-router.get("/me", auth, getOnboarding);
+router.get("/me", auth, getOnboardingStatus);
 
 module.exports = router;

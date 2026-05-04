@@ -86,17 +86,31 @@ const onboardingSchema = new mongoose.Schema({
   panNumber: String,
   dobOrIncorporation: Date,
 
+  // documents: [
+  //   {
+  //     type: String,
+  //     filePath: String,
+  //     status: {
+  //       type: String,
+  //       enum: ["pending", "approved", "rejected"],
+  //       default: "pending"
+  //     }
+  //   }
+  // ],
+
   documents: [
-    {
+  {
+    type: {
+      type: String
+    },
+    filePath: String,
+    status: {
       type: String,
-      filePath: String,
-      status: {
-        type: String,
-        enum: ["pending", "approved", "rejected"],
-        default: "pending"
-      }
+      enum: ["pending", "approved", "rejected"],
+      default: "pending"
     }
-  ],
+  }
+],
 
   isDocumentsUploaded: { type: Boolean, default: false },
 

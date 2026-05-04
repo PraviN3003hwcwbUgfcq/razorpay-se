@@ -44,6 +44,7 @@ exports.saveContact = async (req, res) => {
       },
       {
         email,
+        isEmailVerified: true,
         currentStep: 1
       },
       { upsert: true, new: true }
@@ -233,7 +234,26 @@ exports.savePanDetails = async (req, res) => {
 };
 
 
+// error will in the onboreding we have to look in thi
+
 // 🔹 GET ONBOARDING DATA
+// exports.getOnboarding = async (req, res) => {
+//   try {
+//     const data = await Onboarding.findOne({
+//       userId: req.user.id,
+//       accountId: req.user.accountId
+//     });
+
+//     res.json({ success: true, data });
+
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
+
+///////
+
+
 exports.getOnboarding = async (req, res) => {
   try {
     const data = await Onboarding.findOne({
@@ -241,15 +261,25 @@ exports.getOnboarding = async (req, res) => {
       accountId: req.user.accountId
     });
 
-    res.json({ success: true, data });
+    res.json({
+      success: true,
+      data: data
+    });
 
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      success: false,
+      error: err.message
+    });
   }
 };
 
+/////
+
+
+
 // 🔹 GET ONBOARDING STATUS (NEW)
-exports.getOnboardingStatus = async (req, res) => {
+exports. getOnboardingStatus = async (req, res) => {
   try {
     const data = await Onboarding.findOne({
       userId: req.user.id,

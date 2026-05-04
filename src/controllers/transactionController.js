@@ -2,7 +2,7 @@ const Transaction = require("../models/Transaction");
 
 exports.createTransaction = async (req, res) => {
   try {
-    const { customer, amount, method, status, date } = req.body;
+    const { customer, amount, method, status, date, description  } = req.body;
     if (!req.user.accountId) {
       return res.status(400).json({
         success: false,
@@ -17,8 +17,10 @@ exports.createTransaction = async (req, res) => {
       customer,
       amount,
       method,
-      status,
-      date
+      status: status || "pending",
+      date,
+      description,
+      currency: "INR"
     });
 
     res.json({
@@ -63,6 +65,49 @@ exports.getTransactions = async (req, res) => {
       success: true,
       count: transactions.length,
       transactions
+    });
+
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+exports.updateTransactionStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, failureReason } = req.body;
+
+    if (!["pending", "success", "failed"].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status"
+      });
+    }
+
+    const transaction = await Transaction.findOne({
+      _id: id,
+      userId: req.user.id,
+      accountId: req.user.accountId
+    });
+
+    if (!transaction) {
+      return res.status(404).json({
+        success: false,
+        message: "Transaction not found"
+      });
+    }
+
+    transaction.status = status;
+
+    if (status === "failed") {
+      transaction.failureReason = failureReason || "";
+    }
+
+    await transaction.save();
+
+    res.json({
+      success: true,
+      transaction
     });
 
   } catch (err) {

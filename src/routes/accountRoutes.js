@@ -3,6 +3,15 @@ const router = express.Router();
 
 
 const auth = require("../middleware/authMiddleware");
+const checkActiveAccount = require("../middleware/checkActiveAccount");
+
+router.get("/access-check", auth, checkActiveAccount, (req, res) => {
+  res.json({
+    success: true,
+    message: "Account is active"
+  });
+});
+
 
 const {
   getAccounts,
